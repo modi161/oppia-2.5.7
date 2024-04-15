@@ -1,0 +1,121 @@
+<div class="conversation-skin-supplemental-card">
+  <div ng-if="helpCardHtml" class="conversation-skin-help-card"
+       ng-class="{'help-card-standard': isWindowTall(), 'help-card-fixed': !isWindowTall() || isViewportNarrow()}" >
+    <img class="conversation-skin-oppia-avatar"
+         ng-src="<[::OPPIA_AVATAR_IMAGE_URL]>" alt="">
+    <button type="button" class="conversation-skin-close-help-card-button"
+            ng-click="clearHelpCard()" ng-if="!helpCardHasContinueButton">
+      <i class="material-icons md-18">&#xE5CD;</i>
+    </button>
+    <div class="conversation-skin-help-card-content" angular-html-bind="helpCardHtml"></div>
+    <br>
+    <md-button class="oppia-learner-confirm-button protractor-test-continue-to-next-card-button"
+               focus-on="<[::CONTINUE_BUTTON_FOCUS_LABEL]>"
+               ng-click="onClickContinueButton()"
+               ng-if="helpCardHasContinueButton"
+               style="margin-top: 12px;"
+               aria-label="Continue">
+      <span translate="I18N_PLAYER_CONTINUE_BUTTON"></span>
+      <i class="fa fa-arrow-right"
+         style="font-size: 19px; padding-top: 1.5px;"></i>
+    </md-button>
+  </div>
+
+  <div class="protractor-test-conversation-input"
+       angular-html-bind="activeCard.interactionHtml">
+  </div>
+  <div ng-if="hintsExist" style="text-align: left; padding: 8px">
+    <hint-button ng-show="!areAllHintsExhausted() || (areAllHintsExhausted() && !solutionExists)"
+                 on-click-hint-button="consumeHint()"
+                 current-hint-is-available="isHintAvailable()"
+                 all-hints-are-exhausted="areAllHintsExhausted()"
+                 is-supplemental-card="true">
+    </hint-button>
+    <solution-button ng-if="areAllHintsExhausted()"
+                     on-click-solution-button="viewSolution()"
+                     solution-is-available="isCurrentSolutionAvailable()">
+    </solution-button>
+  </div>
+</div>
+
+<style>
+  .conversation-skin-help-card {
+    background: #fff;
+    border-radius: 2px;
+    /* We move the help card lower so that it does not block
+       the terminal output in the CodeRepl interaction.
+    */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.24), 0 1px 3px rgba(0,0,0,0.12);
+    min-height: 50px;
+    opacity: 1;
+    padding: 12px;
+    right: 12px;
+    text-align: left;
+    transition: all 350ms;
+    z-index: 500;
+  }
+
+  .conversation-skin-help-card.ng-enter,
+  .conversation-skin-help-card.ng-leave-active {
+    opacity: 0;
+    transform: translateX(200px);
+  }
+
+  .help-card-standard {
+    bottom: -50px;
+    position: absolute;
+  }
+
+  .help-card-fixed {
+    bottom: 50px;
+    position: fixed;
+  }
+
+  .conversation-skin-help-card .conversation-skin-oppia-avatar {
+    top: 12px;
+    left: -15px;
+  }
+
+  .conversation-skin-help-card-content {
+    width: 270px;
+  }
+
+  .conversation-skin-close-help-card-button {
+    background: none;
+    border: 0;
+    color: #000;
+    cursor: pointer;
+    height: 24px;
+    opacity: 0.5;
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    width: 24px;
+    z-index: 200;
+  }
+
+  .conversation-skin-supplemental-card {
+    background-color: #ffffff;
+  }
+  .conversation-skin-supplemental-card .hint-button {
+    background-color: #0D48A1;
+    border: none;
+    color: #ffffff;
+  }
+
+  .conversation-skin-supplemental-card .solution-button {
+    background-color: #d9534f;
+    border-color: #d43f3a;
+    color: #fff;
+  }
+
+  .conversation-skin-supplemental-card button.md-button.md-default-theme.hint-button:focus,
+  .conversation-skin-supplemental-card button.md-button.md-default-theme.hint-button:hover {
+    background-color: #115FD4;
+  }
+
+  .conversation-skin-supplemental-card button.md-button.md-default-theme.solution-button:focus,
+  .conversation-skin-supplemental-card button.md-button.md-default-theme.solution-button:hover {
+    background-color: #da190b;
+  }
+</style>
